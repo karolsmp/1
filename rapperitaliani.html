@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Alessandro Bernini - Creazioni</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* --- RESET E BACKGROUND --- */
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            background-image: url('LogoABSfondo4.png');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover;
+            position: relative;
+        }
+
+        /* --- VELO TRASPARENTE FULL SCREEN --- */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Modifica lo 0.6 per scurire di più o di meno */
+            z-index: 0;
+        }
+
+        /* --- MENU DI NAVIGAZIONE --- */
+        nav.ribbon-menu {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: #000000;
+        }
+
+        nav.ribbon-menu ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0 10px;
+            display: flex;
+            align-items: center;
+            height: 70px;
+        }
+
+        .ribbon-menu li {
+            position: relative;
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .ribbon-menu li:nth-last-child(2) { margin-left: auto; }
+
+        .ribbon-menu li a {
+            display: block;
+            color: #ffffff;
+            text-align: center;
+            padding: 6px 15px;
+            text-decoration: none;
+            font-weight: bold;
+            border: 1px solid #ffffff;
+            margin: 0 4px;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .ribbon-menu li a:hover, .dropdown:hover > a {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 4px;
+            background-color: #000000;
+            min-width: 180px;
+            border: 1px solid #ffffff;
+            z-index: 1001;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.5);
+        }
+
+        .dropdown-content a {
+            color: #ffffff !important;
+            padding: 12px 16px;
+            text-align: left;
+            border: none !important;
+            border-bottom: 1px solid #ffffff !important;
+            margin: 0 !important;
+            display: block;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .dropdown-content a:last-child {
+            border-bottom: none !important;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+
+        .dropdown:hover .dropdown-content { display: block; }
+
+        /* --- LAYOUT CONTENUTI --- */
+        .container-main {
+            display: flex;
+            height: 100vh;
+            padding-top: 70px;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1; /* Assicura che i contenuti stiano sopra il velo scuro */
+        }
+
+        .left-side {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 5% 10%;
+            position: relative;
+        }
+
+        .text-content {
+            position: absolute;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            max-width: 450px;
+        }
+
+        .text-content.active { opacity: 1; position: relative; }
+
+        h1 { font-size: 2.5rem; margin-bottom: 20px; text-transform: uppercase; }
+        p { line-height: 1.6; color: #ccc; font-size: 1.1rem; }
+
+        .right-side {
+            width: 50%;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scrollbar-width: none;
+        }
+
+        .right-side::-webkit-scrollbar { display: none; }
+
+        .image-panel {
+            height: calc(100vh - 70px);
+            scroll-snap-align: start;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* MODIFICATO: Ora il carosello è molto più grande (prende l'80% dell'altezza disponibile) ed è un quadrato perfetto */
+        .carousel {
+            height: 80%;
+            aspect-ratio: 1 / 1; /* Mantiene la proporzione quadrata identica alla tua foto */
+            width: auto; /* Permette alla larghezza di calcolarsi automaticamente in base all'altezza per fare il quadrato */
+        }
+
+        .carousel-inner, .carousel-item {
+            height: 100%;
+        }
+
+        .carousel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Taglia l'immagine senza deformarla se non è quadrata */
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .carousel-control-prev, .carousel-control-next {
+            width: 50px;
+            background: rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .container-main { flex-direction: column; overflow-y: auto; }
+            .left-side, .right-side { width: 100%; height: auto; }
+            .image-panel { height: 60vh; padding: 20px 0; }
+            .carousel { height: 100%; width: 85vw; max-height: 85vw; } /* Responsive su Mobile */
+            nav.ribbon-menu ul { height: auto; padding: 10px; flex-wrap: wrap; justify-content: center; }
+            .ribbon-menu li { margin: 5px 0; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="ribbon-menu">
+    <ul>
+        <li><a href="index.html">HOME</a></li>
+        <li class="dropdown">
+            <a href="#">CREAZIONI</a>
+            <div class="dropdown-content">
+                <a href="rapperitaliani.html">RAPPER ITALIANI</a>
+                <a href="rapperesteri.html">RAPPER ESTERI</a>
+                <a href="altro.html">ALTRO</a>
+            </div>
+        </li>
+        <li><a href="chisono.html">CHI SONO</a></li>
+        <li><a href="contatto.html">CONTATTO</a></li>
+    </ul>
+</nav>
+
+<div class="container-main">
+    <div class="left-side" id="text-container">
+        <div class="text-content active" id="text-1">
+            <h1>Tedua</h1>
+        </div>
+        <div class="text-content" id="text-2">
+            <h1>Tony Boy</h1>
+        </div>
+        <div class="text-content" id="text-3">
+            <h1>Sfera Ebbasta</h1>
+        </div>
+        <div class="text-content" id="text-4">
+            <h1>Shiva</h1>
+        </div>
+        <div class="text-content" id="text-5">
+            <h1>Marracash</h1>
+        </div>
+        <div class="text-content" id="text-6">
+            <h1>Bresh</h1>
+        </div>
+        <div class="text-content" id="text-7">
+            <h1>Glocky</h1>
+        </div>
+        <div class="text-content" id="text-8">
+            <h1>Capo Plaza</h1>
+        </div>
+        <div class="text-content" id="text-9">
+            <h1>Emis Killa</h1>
+        </div>
+        <div class="text-content" id="text-10">
+            <h1>Fedez</h1>
+        </div>
+        <div class="text-content" id="text-11">
+            <h1>Nerissima Serpe</h1>
+        </div>
+        <div class="text-content" id="text-12">
+            <h1>Papa V</h1>
+        </div>
+        <div class="text-content" id="text-13">
+            <h1>22simba</h1>
+        </div>
+        <div class="text-content" id="text-14">
+            <h1>Luchè</h1>
+        </div>
+        <div class="text-content" id="text-15">
+            <h1>Tony Effe</h1>
+        </div>
+        <div class="text-content" id="text-16">
+            <h1>Bello Figo</h1>
+        </div>
+        <div class="text-content" id="text-17">
+            <h1>Niky Savage</h1>
+        </div>
+        <div class="text-content" id="text-18">
+            <h1>Damiano David</h1>
+        </div>
+        <div class="text-content" id="text-19">
+            <h1>Finesse</h1>
+        </div>
+    </div>
+
+    <div class="right-side" id="image-scroll">
+        <div class="image-panel" data-target="text-1">
+            <div id="carousel1" class="carousel slide" data-bs-interval="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="Tedua/Tedua1.jpg" alt="Tedua1">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Tedua/Tedua2.jpg" alt="Tedua2">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Tedua/Tedua3.jpg" alt="Tedua3">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Tedua/Tedua4.jpg" alt="Tedua4">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Tedua/Tedua5.jpg" alt="Tedua5">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Tedua/Tedua6.jpg" alt="Tedua6">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Tedua/Tedua7.jpg" alt="Tedua7">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Tedua/Tedua8.jpg" alt="Tedua8">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Tedua/Tedua9.jpg" alt="Tedua9">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Tedua/Tedua10.jpg" alt="Tedua10">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Tedua/Tedua11.jpg" alt="Tedua11">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Tedua/Tedua12.jpg" alt="Tedua12">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Tedua/Tedua13.jpg" alt="Tedua13">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Tedua/Tedua14.jpg" alt="Tedua14">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel1" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel1" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="image-panel" data-target="text-2">
+            <div id="carousel2" class="carousel slide" data-bs-interval="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="2.jpg" alt="Lavoro 2">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="2b.jpg" alt="Lavoro 2b"> </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel2" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel2" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="image-panel" data-target="text-3">
+            <div id="carousel3" class="carousel slide" data-bs-interval="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="3.jpg" alt="Lavoro 3">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel3" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel3" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="image-panel" data-target="text-4">
+            <div id="carousel4" class="carousel slide" data-bs-interval="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="4.jpg" alt="Lavoro 4">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel4" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel4" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="image-panel" data-target="text-5">
+            <div id="carousel5" class="carousel slide" data-bs-interval="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="5.jpg" alt="Lavoro 5">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel5" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel5" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="image-panel" data-target="text-6">
+            <div id="carousel6" class="carousel slide" data-bs-interval="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="6.jpg" alt="Lavoro 6">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel6" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel6" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="image-panel" data-target="text-7">
+            <div id="carousel7" class="carousel slide" data-bs-interval="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="7.jpg" alt="Lavoro 7">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel7" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel7" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="image-panel" data-target="text-8">
+            <div id="carousel8" class="carousel slide" data-bs-interval="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="8.jpg" alt="Lavoro 8">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel8" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel8" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="image-panel" data-target="text-9">
+            <div id="carousel9" class="carousel slide" data-bs-interval="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="9.jpg" alt="Lavoro 9">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel9" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel9" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="image-panel" data-target="text-10">
+            <div id="carousel10" class="carousel slide" data-bs-interval="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="10.jpg" alt="Lavoro 10">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel10" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel10" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="image-panel" data-target="text-11">
+            <div id="carousel11" class="carousel slide" data-bs-interval="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="11.jpg" alt="Lavoro 11">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel11" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel11" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="image-panel" data-target="text-12">
+            <div id="carousel12" class="carousel slide" data-bs-interval="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="12.jpg" alt="Lavoro 12">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel12" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel12" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="image-panel" data-target="text-13">
+            <div id="carousel13" class="carousel slide" data-bs-interval="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="13.jpg" alt="Lavoro 13">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel13" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel13" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="image-panel" data-target="text-14">
+            <div id="carousel14" class="carousel slide" data-bs-interval="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="14.jpg" alt="Lavoro 14">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel14" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel14" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="image-panel" data-target="text-15">
+            <div id="carousel15" class="carousel slide" data-bs-interval="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="15.jpg" alt="Lavoro 15">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel15" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel15" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="image-panel" data-target="text-16">
+            <div id="carousel16" class="carousel slide" data-bs-interval="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="16.jpg" alt="Lavoro 16">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel16" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel16" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="image-panel" data-target="text-17">
+            <div id="carousel17" class="carousel slide" data-bs-interval="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="17.jpg" alt="Lavoro 17">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel17" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel17" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="image-panel" data-target="text-18">
+            <div id="carousel18" class="carousel slide" data-bs-interval="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="18.jpg" alt="Lavoro 18">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel18" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel18" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="image-panel" data-target="text-19">
+            <div id="carousel19" class="carousel slide" data-bs-interval="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="19.jpg" alt="Lavoro 19">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel19" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel19" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const panels = document.querySelectorAll('.image-panel');
+    const texts = document.querySelectorAll('.text-content');
+    const observerOptions = { root: document.getElementById('image-scroll'), threshold: 0.6 };
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const targetId = entry.target.getAttribute('data-target');
+                texts.forEach(t => t.classList.remove('active'));
+                const activeText = document.getElementById(targetId);
+                if (activeText) activeText.classList.add('active');
+            }
+        });
+    }, observerOptions);
+    panels.forEach(panel => observer.observe(panel));
+</script>
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Sono - Alessandro Bernini</title>
+    <style>
+        /* --- RESET E BLOCCO SCROLL --- */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* Elimina la barra di scorrimento */
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #000;
+        }
+
+        /* --- STILI MENU NAVIGAZIONE --- */
+        nav.ribbon-menu {
+            width: 100%;
+            background-color: #000000;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            height: 70px; /* Allineato a 70px come le altre pagine */
+        }
+
+        nav.ribbon-menu ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0 10px;
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .ribbon-menu li {
+            position: relative;
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .ribbon-menu li:nth-child(3) {
+            margin-left: auto; /* Sposta CHI SONO e CONTATTO a destra */
+        }
+
+        .ribbon-menu li a {
+            display: block;
+            color: #ffffff;
+            text-align: center;
+            padding: 6px 15px;
+            text-decoration: none;
+            font-weight: bold;
+            border: 1px solid #ffffff;
+            margin: 0 4px;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Effetto hover che inverte i colori */
+        .ribbon-menu li a:hover,
+        .dropdown:hover > a {
+            background-color: #ffffff;
+            color: #000000 !important;
+        }
+
+        /* TENDINA */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 4px;
+            background-color: #000000;
+            min-width: 180px;
+            z-index: 1001;
+            border: 1px solid #ffffff;
+        }
+
+        .dropdown-content a {
+            color: #ffffff !important;
+            padding: 12px 16px;
+            text-align: left;
+            border: none !important;
+            border-bottom: 1px solid #ffffff !important;
+            margin: 0 !important;
+            display: block;
+            font-size: 14px;
+        }
+
+        .dropdown-content a:last-child {
+            border-bottom: none !important;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* --- LAYOUT PRINCIPALE (NO SCROLL) --- */
+        body {
+            background-image: url('LogoABSfondo4.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            color: #fff;
+            /* Flexbox per gestire la distribuzione tra contenuto e footer */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            display: flex;
+            height: calc(100vh - 130px); /* Sottratta l'altezza di navbar (70px) + footer (60px) */
+            width: 100%;
+            padding-top: 70px; /* Spazio per il menu */
+            box-sizing: border-box; /* Include il padding nell'altezza totale */
+            flex: 1;
+        }
+
+        .content-section {
+            flex: 1;
+            padding: 0 5%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .title {
+            font-family: 'Arial', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem); /* Dimensione fluida */
+            margin-bottom: 20px;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin-bottom: 20px;
+            color: #eee;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: #fff;
+            color: #000;
+            padding: 15px 40px;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 1px;
+            transition: background-color 0.3s;
+            align-self: flex-start;
+        }
+
+        .cta-button:hover {
+            background-color: #ddd;
+        }
+
+        .image-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .image-section img {
+            max-width: 90%;
+            max-height: 80%; /* Impedisce all'immagine di forzare lo scroll */
+            object-fit: contain;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* --- FOOTER (IDENTICO) --- */
+        footer {
+            background-color: #0f172a;
+            color: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1002;
+            height: 60px;
+            box-sizing: border-box;
+        }
+
+        .footer-right img {
+            width: 30px;
+            height: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .footer-right img:hover {
+            transform: scale(1.2);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            body {
+                overflow-y: auto; /* Permette lo scroll solo su cellulare se il contenuto è troppo */
+            }
+            .container {
+                flex-direction: column-reverse;
+                height: auto;
+                min-height: calc(100vh - 60px); /* Tiene conto del footer */
+            }
+            .content-section {
+                padding: 40px 20px;
+                flex: none;
+            }
+            .image-section {
+                padding: 20px 0;
+                flex: none;
+            }
+            .image-section img {
+                max-height: 50vh;
+            }
+            nav.ribbon-menu ul { font-size: 10px; }
+            .ribbon-menu li a { padding: 5px 10px; margin: 0 2px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="ribbon-menu">
+    <ul>
+        <li><a href="index.html">HOME</a></li>
+        <li class="dropdown">
+            <a href="#">CREAZIONI</a>
+            <div class="dropdown-content">
+                <a href="rapperitaliani.html">RAPPER ITALIANI</a>
+                <a href="rapperesteri.html">RAPPER ESTERI</a>
+                <a href="altro.html">ALTRO</a>
+            </div>
+        </li>
+        <li><a href="chisono.html">CHI SONO</a></li>
+        <li><a href="contatto.html">CONTATTO</a></li>
+    </ul>
+</nav>
+
+<main class="container">
+    <section class="content-section">
+        <h1 class="title">Alessandro Bernini</h1>
+
+        <p class="description">
+            Il mio viaggio nel mondo della gioielleria nasce dal desiderio di dare una forma tangibile all'astratto.
+            Per me, lavorare l’oro e le pietre preziose non è un mestiere, ma un linguaggio: il mezzo attraverso cui trasformo un’emozione,
+            un ricordo o un frammento di bellezza in qualcosa di eterno.
+        </p>
+
+        <a href="contatto.html" class="cta-button">Prenota un appuntamento ora</a>
+    </section>
+
+    <section class="image-section">
+        <img src="AB.jpg" alt="Chi sono">
+    </section>
+</main>
+
+<footer>
+    <div>© 2026 Alessandro Bernini</div>
+    <div class="footer-right">
+        <a href="https://www.instagram.com/alessandro_bernini?igsh=YXF6OWo0amptY2Ix" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
+        </a>
+    </div>
+</footer>
+
+</body>
+</html>
